@@ -1,0 +1,29 @@
+---
+#user creation task
+- name: Add user "test" to remote server
+  user:
+    name: test
+    comment: "Privileged User"
+    uid: 2001
+    state: present
+    append: yes
+    shell: /bin/bash
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+    createhome: yes        # Defaults to yes
+    home: /home/test  # Defaults to /home/<username>
+
+- name: sudoers
+  lineinfile:
+    dest: /etc/sudoers
+    line: "test  ALL=(ALL)       NOPASSWD: ALL"
+    state: present
+    backup: true
+
+- name: Set authorized key taken from file
+  authorized_key:
+    user: test
+    state: present
+    manage_dir: true
+    key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"

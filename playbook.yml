@@ -1,0 +1,16 @@
+---
+ - hosts: devops
+   remote_user: ansible
+   become: True
+   become_method: sudo
+   become_user: root
+   gather_facts: no
+   vars:
+     tomcat_port: 8007
+     admin_username: admin
+     admin_password: adminsecret
+   roles:
+     - swap
+     - usercreation
+     - java
+     - tomcat

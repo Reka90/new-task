@@ -1,0 +1,23 @@
+---
+#Java installation and add JAVA_HOME to user profile 
+- name: Update APT package manager repositories cache
+  become: true
+  apt:
+   update_cache: yes
+
+- name: Install OpenJDK Java
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+   openjdk-8-jdk
+
+- name: Set JAVA_HOME environment variable
+  lineinfile: dest='/etc/profile' regexp='^#?\s*export JAVA_HOME=(.*)$' line='export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64' state=present
+
+- name: Install build-essential
+  apt: pkg=build-essential state=present
+
+- name: Update all packages to the latest version
+  apt: upgrade=dist 

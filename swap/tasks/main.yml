@@ -1,0 +1,3 @@
+---
+# tasks file for swap
+- include: swap.yml
